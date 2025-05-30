@@ -1,0 +1,732 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>الذكاء الاصطناعي - رؤية تفاعلية ثلاثية الأبعاد</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Tajawal:wght@300;400;500;700&display=swap" rel="stylesheet">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/gsap@3.12.2/dist/gsap.min.js"></script>
+    <style>
+        :root {
+            --primary-color: #00f7ff;
+            --secondary-color: #6c63ff;
+            --dark-bg: #0a0a1a;
+            --darker-bg: #050510;
+            --text-color: #e0e0e0;
+            --accent-color: #ff4d8d;
+            --transition: all 0.3s ease;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Tajawal', sans-serif;
+        }
+
+        body {
+            overflow-x: hidden;
+            background: var(--dark-bg);
+            color: var(--text-color);
+            line-height: 1.6;
+        }
+
+        #canvas-container {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: 1;
+            pointer-events: none;
+        }
+
+        .content-wrapper {
+            position: relative;
+            z-index: 2;
+        }
+
+        .navbar {
+            background: rgba(10, 10, 26, 0.9);
+            backdrop-filter: blur(10px);
+            position: fixed;
+            width: 100%;
+            top: 0;
+            z-index: 1000;
+            box-shadow: 0 2px 15px rgba(0, 0, 0, 0.3);
+            padding: 0.8rem 0;
+        }
+
+        .nav-container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 5%;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .logo {
+            display: flex;
+            align-items: center;
+            font-size: 1.5rem;
+            font-weight: 700;
+            color: var(--primary-color);
+            text-decoration: none;
+            transition: var(--transition);
+        }
+
+        .logo:hover {
+            transform: translateY(-2px);
+            text-shadow: 0 0 10px rgba(0, 247, 255, 0.5);
+        }
+
+        .logo i {
+            margin-left: 10px;
+            font-size: 1.8rem;
+        }
+
+        .nav-links {
+            display: flex;
+            gap: 1.5rem;
+            align-items: center;
+        }
+
+        .nav-link {
+            color: var(--text-color);
+            text-decoration: none;
+            font-weight: 500;
+            transition: var(--transition);
+            padding: 0.5rem 1rem;
+            border-radius: 20px;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .nav-link i {
+            font-size: 1.1rem;
+        }
+
+        .nav-link::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(45deg, var(--primary-color), var(--secondary-color));
+            z-index: -1;
+            opacity: 0;
+            transition: var(--transition);
+            border-radius: 20px;
+        }
+
+        .nav-link:hover::before {
+            opacity: 0.2;
+        }
+
+        .nav-link.active {
+            color: var(--primary-color);
+            font-weight: 600;
+        }
+
+        .nav-link.active::before {
+            opacity: 0.3;
+        }
+
+        /* Mobile menu styles */
+        .menu-toggle {
+            display: none;
+            flex-direction: column;
+            justify-content: space-between;
+            width: 30px;
+            height: 21px;
+            cursor: pointer;
+            z-index: 1001;
+        }
+
+        .bar {
+            height: 3px;
+            width: 100%;
+            background-color: var(--primary-color);
+            border-radius: 10px;
+            transition: var(--transition);
+        }
+
+        /* Responsive styles */
+        @media (max-width: 768px) {
+            .menu-toggle {
+                display: flex;
+            }
+
+            .nav-links {
+                position: fixed;
+                top: 0;
+                right: -100%;
+                height: 100vh;
+                width: 70%;
+                max-width: 300px;
+                background: rgba(10, 10, 26, 0.98);
+                backdrop-filter: blur(10px);
+                flex-direction: column;
+                justify-content: center;
+                align-items: center;
+                transition: 0.5s ease-in-out;
+                box-shadow: -5px 0 15px rgba(0, 0, 0, 0.3);
+                padding: 2rem 0;
+                gap: 2rem;
+            }
+
+            .nav-links.active {
+                right: 0;
+            }
+
+            .nav-link {
+                font-size: 1.2rem;
+                padding: 0.8rem 2rem;
+                width: 80%;
+                text-align: center;
+                justify-content: center;
+            }
+        }
+
+        .hero {
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            padding: 0 10%;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .hero-content {
+            max-width: 600px;
+            z-index: 2;
+            margin-top: 4rem;
+            opacity: 0;
+            transform: translateY(20px);
+            animation: fadeInUp 1s ease forwards;
+        }
+
+        @keyframes fadeInUp {
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .hero h1 {
+            font-size: 3.5rem;
+            margin-bottom: 1.5rem;
+            background: linear-gradient(45deg, var(--primary-color), var(--secondary-color));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            line-height: 1.2;
+        }
+
+        .hero p {
+            font-size: 1.2rem;
+            margin-bottom: 2rem;
+            color: var(--text-color);
+            opacity: 0.9;
+        }
+
+        .features-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 2rem;
+            padding: 4rem 10%;
+            position: relative;
+            z-index: 2;
+        }
+
+        .feature-card {
+            background: rgba(255, 255, 255, 0.05);
+            border-radius: 20px;
+            padding: 2rem;
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            transition: var(--transition);
+        }
+
+        .feature-card:hover {
+            transform: translateY(-10px);
+            box-shadow: 0 10px 30px rgba(0, 247, 255, 0.1);
+        }
+
+        .feature-icon {
+            font-size: 2.5rem;
+            color: var(--primary-color);
+            margin-bottom: 1rem;
+        }
+
+        .feature-title {
+            font-size: 1.5rem;
+            margin-bottom: 1rem;
+            color: var(--primary-color);
+        }
+
+        .feature-description {
+            color: var(--text-color);
+            opacity: 0.8;
+        }
+
+        .btn {
+            padding: 0.8rem 2rem;
+            border-radius: 30px;
+            font-weight: 500;
+            cursor: pointer;
+            transition: var(--transition);
+            border: none;
+            outline: none;
+            text-decoration: none;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            gap: 0.5rem;
+            background: linear-gradient(45deg, var(--primary-color), var(--secondary-color));
+            color: var(--darker-bg);
+        }
+
+        .btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(0, 247, 255, 0.3);
+        }
+
+        .future-section {
+            padding: 6rem 10%;
+            position: relative;
+            z-index: 2;
+        }
+
+        .future-title {
+            text-align: center;
+            margin-bottom: 4rem;
+        }
+
+        .future-title h2 {
+            font-size: 2.5rem;
+            color: var(--primary-color);
+            margin-bottom: 1rem;
+        }
+
+        .future-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 2rem;
+        }
+
+        .future-card {
+            background: rgba(255, 255, 255, 0.05);
+            border-radius: 20px;
+            padding: 2rem;
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            transition: var(--transition);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .future-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(45deg, transparent, rgba(0, 247, 255, 0.1));
+            opacity: 0;
+            transition: var(--transition);
+        }
+
+        .future-card:hover {
+            transform: translateY(-10px);
+            box-shadow: 0 10px 30px rgba(0, 247, 255, 0.1);
+        }
+
+        .future-card:hover::before {
+            opacity: 1;
+        }
+
+        .future-card h3 {
+            font-size: 1.8rem;
+            color: var(--primary-color);
+            margin-bottom: 1rem;
+        }
+
+        .future-card p {
+            color: var(--text-color);
+            opacity: 0.8;
+            line-height: 1.8;
+        }
+
+        @media (max-width: 768px) {
+            .hero h1 {
+                font-size: 2.5rem;
+            }
+            
+            .features-grid,
+            .future-grid {
+                grid-template-columns: 1fr;
+                padding: 2rem 5%;
+            }
+            
+            .future-title h2 {
+                font-size: 2rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div id="canvas-container"></div>
+    <div class="content-wrapper">
+        <nav class="navbar">
+            <div class="nav-container">
+                <a href="/" class="logo">
+                    <i class="fas fa-brain"></i>
+                    <span>الذكاء المستقبل</span>
+                </a>
+                <div class="menu-toggle" id="mobile-menu">
+                    <span class="bar"></span>
+                    <span class="bar"></span>
+                    <span class="bar"></span>
+                </div>
+                <div class="nav-links">
+                    <a href="/" class="nav-link active" data-page="home"><i class="fas fa-home"></i> الرئيسية</a>
+                    <a href="/future_ai" class="nav-link" data-page="future"><i class="fas fa-robot"></i> مستقبل الذكاء</a>
+                    <a href="/report" class="nav-link" data-page="report"><i class="fas fa-file-alt"></i> التقرير</a>
+                </div>
+            </div>
+        </nav>
+
+        <section class="hero">
+            <div class="hero-content">
+                <h1>مستقبل الذكاء الاصطناعي</h1>
+                <p>اكتشف عالم الذكاء الاصطناعي المتطور وتأثيراته المستقبلية على حياتنا. نحن نعمل على تطوير حلول مبتكرة تجمع بين الذكاء الاصطناعي والواقع المعزز لتشكيل مستقبل أفضل.</p>
+                <a href="#features" class="btn">
+                    <i class="fas fa-rocket"></i>
+                    ابدأ الرحلة
+                </a>
+            </div>
+        </section>
+
+        <section id="features" class="features-grid">
+            <div class="feature-card">
+                <div class="feature-icon">
+                    <i class="fas fa-brain"></i>
+                </div>
+                <h3 class="feature-title">الذكاء الاصطناعي المتقدم</h3>
+                <p class="feature-description">نطور أنظمة ذكاء اصطناعي متقدمة قادرة على التعلم العميق واتخاذ القرارات المعقدة.</p>
+            </div>
+            <div class="feature-card">
+                <div class="feature-icon">
+                    <i class="fas fa-vr-cardboard"></i>
+                </div>
+                <h3 class="feature-title">الواقع المعزز</h3>
+                <p class="feature-description">دمج الواقع المعزز مع الذكاء الاصطناعي لتجربة تفاعلية فريدة.</p>
+            </div>
+            <div class="feature-card">
+                <div class="feature-icon">
+                    <i class="fas fa-robot"></i>
+                </div>
+                <h3 class="feature-title">الروبوتات المستقلة</h3>
+                <p class="feature-description">تطوير روبوتات ذكية قادرة على التعلم والتكيف مع البيئات المختلفة.</p>
+            </div>
+        </section>
+
+        <section id="ai-technologies" class="technologies-section" style="padding: 6rem 10%; position: relative; z-index: 2; background: rgba(10, 10, 26, 0.7);">
+            <div class="section-header" style="text-align: center; margin-bottom: 4rem;">
+                <h2 style="font-size: 2.5rem; color: var(--primary-color); margin-bottom: 1rem;">
+                    <i class="fas fa-microchip" style="margin-left: 10px;"></i>تقنيات الذكاء الاصطناعي
+                </h2>
+                <p style="font-size: 1.2rem; color: var(--text-color); opacity: 0.8;">استكشف أحدث تقنيات الذكاء الاصطناعي وتطبيقاتها المبتكرة</p>
+            </div>
+            
+            <div class="tech-grid" style="display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 2rem; margin-top: 3rem;">
+                <a href="/dev/deep-learning.html" class="tech-card" style="background: rgba(255, 255, 255, 0.05); border-radius: 16px; padding: 2rem; transition: all 0.3s ease; text-decoration: none; color: inherit; border: 1px solid rgba(0, 247, 255, 0.1);">
+                    <div class="tech-icon" style="width: 80px; height: 80px; background: linear-gradient(45deg, #00f7ff22, #6c63ff22); border-radius: 50%; display: flex; align-items: center; justify-content: center; margin: 0 auto 1.5rem;">
+                        <i class="fas fa-brain" style="font-size: 2.5rem; color: #00f7ff;"></i>
+                    </div>
+                    <h3 style="text-align: center; color: var(--primary-color); margin-bottom: 1rem; font-size: 1.5rem;">التعلم العميق</h3>
+                    <p style="text-align: center; opacity: 0.9; line-height: 1.6;">اكتشف قوة الشبكات العصبية العميقة وتطبيقاتها المتقدمة في معالجة البيانات المعقدة.</p>
+                </a>
+                
+                <a href="/dev/generative-ai.html" class="tech-card" style="background: rgba(255, 255, 255, 0.05); border-radius: 16px; padding: 2rem; transition: all 0.3s ease; text-decoration: none; color: inherit; border: 1px solid rgba(0, 247, 255, 0.1);">
+                    <div class="tech-icon" style="width: 80px; height: 80px; background: linear-gradient(45deg, #ff6b6b22, #ff9e7d22); border-radius: 50%; display: flex; align-items: center; justify-content: center; margin: 0 auto 1.5rem;">
+                        <i class="fas fa-magic" style="font-size: 2.5rem; color: #ff6b6b;"></i>
+                    </div>
+                    <h3 style="text-align: center; color: #ff6b6b; margin-bottom: 1rem; font-size: 1.5rem;">الذكاء التوليدي</h3>
+                    <p style="text-align: center; opacity: 0.9; line-height: 1.6;">اكتشف كيف يمكن للذكاء الاصطناعي إنشاء محتوى إبداعي من نصوص وصور وموسيقى.</p>
+                </a>
+                
+                <a href="/dev/neural-networks.html" class="tech-card" style="background: rgba(255, 255, 255, 0.05); border-radius: 16px; padding: 2rem; transition: all 0.3s ease; text-decoration: none; color: inherit; border: 1px solid rgba(0, 247, 255, 0.1);">
+                    <div class="tech-icon" style="width: 80px; height: 80px; background: linear-gradient(45deg, #6c63ff22, #b063ff22); border-radius: 50%; display: flex; align-items: center; justify-content: center; margin: 0 auto 1.5rem;">
+                        <i class="fas fa-project-diagram" style="font-size: 2.5rem; color: #b063ff;"></i>
+                    </div>
+                    <h3 style="text-align: center; color: #b063ff; margin-bottom: 1rem; font-size: 1.5rem;">الشبكات العصبية</h3>
+                    <p style="text-align: center; opacity: 0.9; line-height: 1.6;">تعرف على كيفية عمل الشبكات العصبية الاصطناعية وتطبيقاتها المتنوعة.</p>
+                </a>
+                
+                <a href="/dev/vr-ar.html" class="tech-card" style="background: rgba(255, 255, 255, 0.05); border-radius: 16px; padding: 2rem; transition: all 0.3s ease; text-decoration: none; color: inherit; border: 1px solid rgba(0, 247, 255, 0.1);">
+                    <div class="tech-icon" style="width: 80px; height: 80px; background: linear-gradient(45deg, #4cc9f022, #4895ef22); border-radius: 50%; display: flex; align-items: center; justify-content: center; margin: 0 auto 1.5rem;">
+                        <i class="fas fa-vr-cardboard" style="font-size: 2.5rem; color: #4cc9f0;"></i>
+                    </div>
+                    <h3 style="text-align: center; color: #4cc9f0; margin-bottom: 1rem; font-size: 1.5rem;">الواقع الافتراضي والمعزز</h3>
+                    <p style="text-align: center; opacity: 0.9; line-height: 1.6;">اكتشف عوالم جديدة من خلال تقنيات الواقع الافتراضي والمعزز.</p>
+                </a>
+                
+
+            </div>
+            
+            <style>
+                .tech-card:hover {
+                    transform: translateY(-10px);
+                    box-shadow: 0 15px 30px rgba(0, 247, 255, 0.1);
+                    border-color: rgba(0, 247, 255, 0.3);
+                }
+                
+                @media (max-width: 768px) {
+                    .tech-grid {
+                        grid-template-columns: 1fr;
+                    }
+                }
+            </style>
+        </section>
+        
+        <section id="future" class="future-section">
+            <div class="future-title">
+                <h2>رؤية المستقبل</h2>
+                <p>اكتشف التطورات المستقبلية في عالم الذكاء الاصطناعي</p>
+            </div>
+            <div class="future-grid">
+                <div class="future-card">
+                    <h3>الذكاء الاصطناعي العام</h3>
+                    <p>تطوير أنظمة ذكاء اصطناعي قادرة على فهم وتنفيذ أي مهمة فكرية يمكن للإنسان القيام بها، مع قدرات تفكير واستنتاج متطورة.</p>
+                </div>
+                <div class="future-card">
+                    <h3>الدمج مع الواقع المعزز</h3>
+                    <p>دمج الذكاء الاصطناعي مع تقنيات الواقع المعزز لخلق تجارب تفاعلية متقدمة تغير طريقة تفاعلنا مع العالم.</p>
+                </div>
+                <div class="future-card">
+                    <h3>الذكاء الاصطناعي الفائق</h3>
+                    <p>تطوير أنظمة ذكاء اصطناعي تتجاوز قدرات البشر في جميع المجالات، مع التركيز على الأخلاق والمسؤولية.</p>
+                </div>
+            </div>
+        </section>
+
+        <!-- Contact Section -->
+        <section id="contact" class="contact-section" style="padding: 6rem 10%; position: relative; z-index: 2; background: rgba(10, 10, 26, 0.7);">
+            <div class="contact-container" style="max-width: 1200px; margin: 0 auto;">
+                <h2 class="section-title" style="text-align: center; font-size: 2.5rem; color: var(--primary-color); margin-bottom: 3rem; position: relative;">
+                    <i class="fas fa-envelope" style="margin-left: 10px;"></i>اتصل بنا
+                </h2>
+                
+                <div class="contact-content" style="display: flex; flex-direction: column; align-items: center; gap: 2rem; background: rgba(255, 255, 255, 0.05); padding: 3rem; border-radius: 20px; backdrop-filter: blur(10px); border: 1px solid rgba(0, 247, 255, 0.1);">
+                    <div class="contact-info" style="text-align: center;
+                    <h3 style="color: var(--primary-color); font-size: 1.8rem; margin-bottom: 1.5rem;">تواصل معنا</h3>
+                    <p style="color: var(--text-color); font-size: 1.2rem; margin-bottom: 2rem; opacity: 0.9;">للإستفسار تواصل معنا </p>
+                    
+                    <div class="email-box" style="background: rgba(0, 247, 255, 0.1); padding: 1.5rem; border-radius: 15px; border: 1px solid var(--primary-color); display: inline-flex; align-items: center; gap: 1rem; transition: all 0.3s ease;">
+                        <i class="fas fa-envelope" style="font-size: 2rem; color: var(--primary-color);"></i>
+                        <div>
+                            <p style="margin: 0; color: var(--text-color); font-size: 1rem; opacity: 0.8;">البريد الإلكتروني</p>
+                            <a href="mailto:mcharymop123@gmail.com" style="color: var(--primary-color); font-size: 1.3rem; font-weight: 600; text-decoration: none; transition: all 0.3s ease;">mcharymop123@gmail.com</a>
+                        </div>
+                    </div>
+                    
+                    <p class="response-time" style="margin-top: 2rem; color: var(--text-color); opacity: 0.8; font-size: 0.9rem;">
+                        <i class="fas fa-clock" style="margin-left: 5px;"></i>نحن نرد عادةً خلال 24 ساعة
+                    </p>
+                </div>
+            </div>
+        </section>
+    </div>
+
+    <script>
+        // Update active link based on current page
+        document.addEventListener('DOMContentLoaded', function() {
+            const currentPage = 'home';
+            const navLinks = document.querySelectorAll('.nav-link');
+            
+            navLinks.forEach(link => {
+                link.classList.remove('active');
+                if (link.getAttribute('data-page') === currentPage) {
+                    link.classList.add('active');
+                }
+                
+                // Add smooth transition on click
+                link.addEventListener('click', function(e) {
+                    // Only handle internal navigation
+                    if (this.href && this.href.startsWith(window.location.origin)) {
+                        e.preventDefault();
+                        document.body.style.opacity = '0.5';
+                        document.body.style.transition = 'opacity 0.3s ease';
+                        
+                        setTimeout(() => {
+                            window.location.href = this.href;
+                        }, 300);
+                    }
+                });
+            });
+            
+            // Add page load animation
+            document.body.style.opacity = '0';
+            setTimeout(() => {
+                document.body.style.transition = 'opacity 0.5s ease';
+                document.body.style.opacity = '1';
+            }, 100);
+        });
+        
+        // Handle page exit animation
+        window.addEventListener('beforeunload', function() {
+            document.body.style.opacity = '0.5';
+            document.body.style.transition = 'opacity 0.3s ease';
+        });
+        
+    </script>
+    <style>
+        /* Add smooth page transitions */
+        body {
+            opacity: 1;
+            transition: opacity 0.3s ease;
+        }
+        
+        /* Style for active navigation link */
+        .nav-link.active {
+            color: var(--primary-color) !important;
+            transform: translateY(-2px);
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+        }
+        
+        .nav-link {
+            transition: all 0.3s ease;
+            padding: 0.5rem 1rem;
+            border-radius: 20px;
+        }
+        
+        .nav-link:hover {
+            background: rgba(0, 247, 255, 0.1);
+            transform: translateY(-2px);
+        }
+    </style>
+    <script>
+        // إعداد مشهد Three.js
+        const scene = new THREE.Scene();
+        const camera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 0.1, 1000);
+        const renderer = new THREE.WebGLRenderer({ antialias: true, alpha: true });
+        renderer.setSize(window.innerWidth, window.innerHeight);
+        document.getElementById('canvas-container').appendChild(renderer.domElement);
+
+        // إنشاء شبكة من النقاط
+        const particlesGeometry = new THREE.BufferGeometry();
+        const particlesCount = 5000;
+        const posArray = new Float32Array(particlesCount * 3);
+
+        for(let i = 0; i < particlesCount * 3; i++) {
+            posArray[i] = (Math.random() - 0.5) * 5;
+        }
+
+        particlesGeometry.setAttribute('position', new THREE.BufferAttribute(posArray, 3));
+
+        const particlesMaterial = new THREE.PointsMaterial({
+            size: 0.005,
+            color: 0x00f7ff,
+            transparent: true,
+            opacity: 0.8
+        });
+
+        const particlesMesh = new THREE.Points(particlesGeometry, particlesMaterial);
+        scene.add(particlesMesh);
+
+        camera.position.z = 2;
+
+        // تحريك النقاط
+        function animate() {
+            requestAnimationFrame(animate);
+            particlesMesh.rotation.x += 0.0005;
+            particlesMesh.rotation.y += 0.0005;
+            renderer.render(scene, camera);
+        }
+
+        animate();
+
+        // تحديث حجم المشهد عند تغيير حجم النافذة
+        window.addEventListener('resize', () => {
+            camera.aspect = window.innerWidth / window.innerHeight;
+            camera.updateProjectionMatrix();
+            renderer.setSize(window.innerWidth, window.innerHeight);
+        });
+
+        // كود القائمة المنسدلة للهواتف
+        const mobileMenu = document.getElementById('mobile-menu');
+        const navLinks = document.querySelector('.nav-links');
+        const navItems = document.querySelectorAll('.nav-link');
+
+        // تبديل القائمة المنسدلة
+        mobileMenu.addEventListener('click', () => {
+            mobileMenu.classList.toggle('active');
+            navLinks.classList.toggle('active');
+            document.body.style.overflow = navLinks.classList.contains('active') ? 'hidden' : '';
+        });
+
+        // إغلاق القائمة عند النقر على رابط
+        navItems.forEach(link => {
+            link.addEventListener('click', () => {
+                if (navLinks.classList.contains('active')) {
+                    mobileMenu.classList.remove('active');
+                    navLinks.classList.remove('active');
+                    document.body.style.overflow = '';
+                }
+            });
+        });
+
+        // إضافة تأثير سلس للتمرير
+        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+            anchor.addEventListener('click', function(e) {
+                if (this.getAttribute('href') === '#') return;
+                
+                e.preventDefault();
+                const targetId = this.getAttribute('href');
+                if (targetId.startsWith('#')) {
+                    const targetElement = document.querySelector(targetId);
+                    if (targetElement) {
+                        window.scrollTo({
+                            top: targetElement.offsetTop - 80,
+                            behavior: 'smooth'
+                        });
+                    }
+                } else {
+                    window.location.href = targetId;
+                }
+            });
+        });
+
+        // إضافة تأثير التمرير للشريط العلوي
+        window.addEventListener('scroll', () => {
+            const navbar = document.querySelector('.navbar');
+            if (window.scrollY > 50) {
+                navbar.style.background = 'rgba(10, 10, 26, 0.98)';
+                navbar.style.padding = '0.5rem 0';
+            } else {
+                navbar.style.background = 'rgba(10, 10, 26, 0.9)';
+                navbar.style.padding = '0.8rem 0';
+            }
+        });
+
+        // تأثيرات التمرير السلس
+        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+            anchor.addEventListener('click', function (e) {
+                e.preventDefault();
+                document.querySelector(this.getAttribute('href')).scrollIntoView({
+                    behavior: 'smooth'
+                });
+            });
+        });
+    </script>
+</body>
+</html>

@@ -1,0 +1,265 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>الشبكات العصبية | AITechZone</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        body {
+            background: #0a0a1a;
+            color: #fff;
+            font-family: 'Tajawal', Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            min-height: 100vh;
+        }
+        .container {
+            max-width: 800px;
+            margin: 40px auto;
+            background: #18182a;
+            border-radius: 16px;
+            box-shadow: 0 8px 32px rgba(0,0,0,0.3);
+            padding: 2.5rem 2rem;
+        }
+        .feature-image {
+            width: 100%;
+            height: 180px;
+            background: linear-gradient(45deg, #00f7ff22, #ff408122);
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-bottom: 1.5rem;
+            position: relative;
+            overflow: hidden;
+        }
+        .feature-image i {
+            font-size: 4rem;
+            color: #00f7ff;
+            z-index: 1;
+        }
+        .title {
+            color: #00f7ff;
+            font-size: 2.2rem;
+            margin-bottom: 1rem;
+            text-align: center;
+        }
+        .content {
+            line-height: 1.8;
+            font-size: 1.1rem;
+            color: #e0e0e0;
+        }
+        .back-button {
+            display: inline-block;
+            margin-top: 2rem;
+            padding: 0.8rem 1.5rem;
+            background: linear-gradient(45deg, #00f7ff, #6c63ff);
+            color: #fff;
+            text-decoration: none;
+            border-radius: 50px;
+            font-weight: bold;
+            transition: all 0.3s ease;
+            border: none;
+            cursor: pointer;
+        }
+        .back-button:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 5px 15px rgba(0, 247, 255, 0.4);
+        }
+        @media (max-width: 768px) {
+            .container {
+                margin: 20px 15px;
+                padding: 1.5rem 1rem;
+            }
+            .title {
+                font-size: 1.8rem;
+            }
+        }
+        
+        /* Neural Network Animation */
+        .neuron {
+            position: absolute;
+            width: 12px;
+            height: 12px;
+            background: #00f7ff;
+            border-radius: 50%;
+            filter: blur(1px);
+            opacity: 0;
+            animation: float 8s infinite ease-in-out;
+        }
+        
+        @keyframes float {
+            0% {
+                transform: translate(0, 0) scale(0.5);
+                opacity: 0;
+            }
+            10% {
+                opacity: 0.8;
+            }
+            90% {
+                opacity: 0.8;
+            }
+            100% {
+                transform: translate(
+                    calc((Math.random() - 0.5) * 200px),
+                    calc((Math.random() - 0.5) * 100px)
+                ) scale(1.5);
+                opacity: 0;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <a href="/" class="back-button">
+            <i class="fas fa-arrow-right"></i> العودة للصفحة الرئيسية
+        </a>
+        
+        <div class="feature-image" id="neural-bg">
+            <i class="fas fa-project-diagram"></i>
+        </div>
+        
+        <h1 class="title">الشبكات العصبية</h1>
+        
+        <div class="content">
+            <p>الشبكات العصبية الاصطناعية هي أنظمة حاسوبية مستوحاة من عمل الدماغ البشري، تتكون من وحدات مترابطة تسمى العصبونات الاصطناعية، وتستخدم في تعلم الأنماط المعقدة من البيانات.</p>
+            
+            <h2>مكونات الشبكات العصبية</h2>
+            <ul>
+                <li>طبقة الإدخال: تستقبل البيانات الأولية</li>
+                <li>الطبقات المخفية: تقوم بمعالجة البيانات</li>
+                <li>طبقة الإخراج: تنتج النتائج النهائية</li>
+                <li>الأوزان والانحيازات: تحدد قوة الاتصالات بين العصبونات</li>
+                <li>دالة التنشيط: تحدد ناتج كل عصبون</li>
+            </ul>
+            
+            <h2>تطبيقات الشبكات العصبية</h2>
+            <p>تستخدم الشبكات العصبية في العديد من التطبيقات المتقدمة مثل:</p>
+            <ul>
+                <li>التعرف على الصور والكلام</li>
+                <li>معالجة اللغات الطبيعية</li>
+                <li>السيارات ذاتية القيادة</li>
+                <li>التشخيص الطبي</li>
+                <li>التحليل المالي والتنبؤ بالأسواق</li>
+            </ul>
+            
+            <div id="network-visualization" style="width: 100%; height: 300px; margin: 2rem 0; border-radius: 12px; overflow: hidden; background: rgba(0, 0, 0, 0.2); position: relative;">
+                <canvas id="neuralCanvas" style="width: 100%; height: 100%;"></canvas>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // إنشاء تأثير العصبونات العائمة
+        const neuralBg = document.getElementById('neural-bg');
+        
+        function createNeuron() {
+            const neuron = document.createElement('div');
+            neuron.className = 'neuron';
+            neuron.style.left = Math.random() * 100 + '%';
+            neuron.style.top = Math.random() * 100 + '%';
+            neuron.style.animationDelay = Math.random() * 5 + 's';
+            neuron.style.animationDuration = (Math.random() * 5 + 5) + 's';
+            neuralBg.appendChild(neuron);
+            
+            setTimeout(() => {
+                neuron.remove();
+            }, 10000);
+        }
+        
+        // إنشاء عصبونات بشكل دوري
+        setInterval(createNeuron, 500);
+        
+        // إنشاء بعض العصبونات الأولية
+        for (let i = 0; i < 10; i++) {
+            createNeuron();
+        }
+        
+        // رسم شبكة عصبية تفاعلية
+        const canvas = document.getElementById('neuralCanvas');
+        const ctx = canvas.getContext('2d');
+        
+        // تعيين أبعاد الكانفاس
+        function resizeCanvas() {
+            const container = canvas.parentElement;
+            canvas.width = container.offsetWidth * 2;
+            canvas.height = container.offsetHeight * 2;
+            canvas.style.width = '100%';
+            canvas.style.height = '100%';
+            drawNeuralNetwork();
+        }
+        
+        // رسم الشبكة العصبية
+        function drawNeuralNetwork() {
+            ctx.clearRect(0, 0, canvas.width, canvas.height);
+            
+            const width = canvas.width;
+            const height = canvas.height;
+            const layerCount = 3 + Math.floor(Math.random() * 3);
+            const layerPadding = width / (layerCount + 1);
+            
+            // رسم الوصلات
+            ctx.strokeStyle = 'rgba(0, 247, 255, 0.2)';
+            ctx.lineWidth = 1;
+            
+            for (let i = 0; i < layerCount - 1; i++) {
+                const x1 = (i + 1) * layerPadding;
+                const x2 = (i + 2) * layerPadding;
+                const nodes1 = 3 + Math.floor(Math.random() * 4);
+                const nodes2 = 3 + Math.floor(Math.random() * 4);
+                
+                for (let j = 0; j < nodes1; j++) {
+                    const y1 = height / (nodes1 + 1) * (j + 1);
+                    
+                    for (let k = 0; k < nodes2; k++) {
+                        const y2 = height / (nodes2 + 1) * (k + 1);
+                        
+                        ctx.beginPath();
+                        ctx.moveTo(x1, y1);
+                        ctx.lineTo(x2, y2);
+                        ctx.stroke();
+                    }
+                }
+            }
+            
+            // رسم العقد
+            for (let i = 0; i < layerCount; i++) {
+                const x = (i + 1) * layerPadding;
+                const nodes = 3 + Math.floor(Math.random() * 4);
+                
+                for (let j = 0; j < nodes; j++) {
+                    const y = height / (nodes + 1) * (j + 1);
+                    
+                    // تأثير توهج
+                    const gradient = ctx.createRadialGradient(x, y, 5, x, y, 15);
+                    gradient.addColorStop(0, 'rgba(0, 247, 255, 0.8)');
+                    gradient.addColorStop(1, 'rgba(0, 247, 255, 0)');
+                    
+                    ctx.beginPath();
+                    ctx.arc(x, y, 15, 0, Math.PI * 2);
+                    ctx.fillStyle = gradient;
+                    ctx.fill();
+                    
+                    // مركز العقدة
+                    ctx.beginPath();
+                    ctx.arc(x, y, 5, 0, Math.PI * 2);
+                    ctx.fillStyle = '#00f7ff';
+                    ctx.fill();
+                }
+            }
+        }
+        
+        // إعادة رسم الشبكة عند تغيير حجم النافذة
+        window.addEventListener('resize', resizeCanvas);
+        
+        // رسم الشبكة الأولي
+        resizeCanvas();
+        
+        // تحديث الشبكة بشكل دوري
+        setInterval(() => {
+            drawNeuralNetwork();
+        }, 3000);
+    </script>
+</body>
+</html>
