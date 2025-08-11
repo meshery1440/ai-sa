@@ -1,0 +1,231 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>mashAI - رؤية الذكاء الاصطناعي</title>
+    <link rel="stylesheet" href="styles.css">
+    <link rel="stylesheet" href="groq-styles.css">
+    <link href="https://fonts.googleapis.com/css2?family=Tajawal:wght@400;500;700&display=swap" rel="stylesheet">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+</head>
+<body>
+    <!-- Loading Screen -->
+    <div id="loading-screen" class="loading-screen">
+        <div class="loading-content">
+            <div class="spinner"></div>
+            <h2>جاري التحميل</h2>
+            <p>يرجى الانتظار...</p>
+        </div>
+    </div>
+
+    <!-- Main Content -->
+    <div id="main-content" class="main-content" style="display: none;">
+        <!-- Navigation -->
+        <nav class="navbar">
+            <div class="nav-container">
+                <div class="nav-brand">
+                    <i class="fas fa-brain"></i>
+                    <span>mashAI</span>
+                </div>
+
+                <!-- Desktop Menu -->
+                <div class="nav-menu desktop-menu">
+                    <a href="#neural-ai" class="nav-link">الذكاء العصبي</a>
+                    <a href="#ai-report" class="nav-link">التقرير الشامل</a>
+                    <a href="#chat" class="nav-link">
+                        <i class="fas fa-comments"></i>
+                        الدردشة الذكية
+                    </a>
+                    <button class="cta-button">ابدأ الآن</button>
+                </div>
+
+                <!-- Mobile Menu Button -->
+                <button id="mobile-menu-btn" class="mobile-menu-btn">
+                    <i class="fas fa-bars"></i>
+                </button>
+            </div>
+
+            <!-- Mobile Menu -->
+            <div id="mobile-menu" class="mobile-menu">
+                <a href="#neural-ai" class="mobile-nav-link">الذكاء العصبي</a>
+                <a href="#ai-report" class="mobile-nav-link">التقرير الشامل</a>
+                <a href="#chat" class="mobile-nav-link">
+                    <i class="fas fa-comments"></i>
+                    الدردشة الذكية
+                </a>
+                <button class="cta-button mobile-cta">ابدأ الآن</button>
+            </div>
+        </nav>
+
+        <!-- Hero Section -->
+        <section class="hero-section">
+            <div class="hero-content">
+                <h1 class="hero-title gradient-text">
+                    استكشف عالم الذكاء الاصطناعي
+                </h1>
+                <p class="hero-subtitle">
+                    رحلة تفاعلية في أحدث تقنيات المستقبل
+                </p>
+                <div class="hero-buttons">
+                    <button class="primary-button">
+                        ابدأ الرحلة
+                        <i class="fas fa-arrow-left"></i>
+                    </button>
+                    <button class="secondary-button">
+                        تعرف على المزيد
+                    </button>
+                </div>
+            </div>
+
+            <!-- Animated Background -->
+            <div class="animated-background">
+                <div class="floating-element" style="--delay: 0s"></div>
+                <div class="floating-element" style="--delay: 2s"></div>
+                <div class="floating-element" style="--delay: 4s"></div>
+                <div class="floating-element" style="--delay: 6s"></div>
+            </div>
+        </section>
+
+        <!-- Features Section -->
+        <section class="features-section">
+            <div class="container">
+                <h2 class="section-title">المميزات الرئيسية</h2>
+                <div class="features-grid">
+                    <div class="feature-card">
+                        <div class="feature-icon">
+                            <i class="fas fa-brain"></i>
+                        </div>
+                        <h3>الشبكات العصبية</h3>
+                        <p>تعلم كيف تعمل أدمغة الآلات الذكية</p>
+                    </div>
+                    <div class="feature-card">
+                        <div class="feature-icon">
+                            <i class="fas fa-eye"></i>
+                        </div>
+                        <h3>الرؤية الحاسوبية</h3>
+                        <p>كيف ترى الآلات وتفهم العالم</p>
+                    </div>
+                    <div class="feature-card">
+                        <div class="feature-icon">
+                            <i class="fas fa-robot"></i>
+                        </div>
+                        <h3>التعلم الآلي</h3>
+                        <p>أنظمة ذكية تتعلم من التجربة</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Chat Section -->
+        <section id="chat" class="chat-section">
+            <div class="container">
+                <h2 class="section-title">الدردشة الذكية مع Groq</h2>
+                <div class="chat-container">
+                    <div class="chat-header">
+                        <div class="chat-status">
+                            <span class="status-indicator"></span>
+                            <span class="status-text">متصل بـ Groq API</span>
+                        </div>
+                        <button id="reset-api-key" class="reset-api-button" title="إعادة تعيين مفتاح API">
+                            <i class="fas fa-key"></i>
+                        </button>
+                    </div>
+                    <div class="chat-messages" id="chat-messages">
+                        <!-- Messages will be added here -->
+                    </div>
+                    <div class="chat-input-container">
+                        <input type="text" id="chat-input" placeholder="اكتب رسالتك هنا..." class="chat-input">
+                        <button id="send-button" class="send-button">
+                            <i class="fas fa-paper-plane"></i>
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Neural AI Section -->
+        <section id="neural-ai" class="neural-section">
+            <div class="container">
+                <h2 class="section-title">الذكاء العصبي</h2>
+                <div class="neural-content">
+                    <div class="neural-visualization">
+                        <div class="neural-network">
+                            <div class="layer input-layer">
+                                <div class="neuron"></div>
+                                <div class="neuron"></div>
+                                <div class="neuron"></div>
+                            </div>
+                            <div class="layer hidden-layer">
+                                <div class="neuron"></div>
+                                <div class="neuron"></div>
+                                <div class="neuron"></div>
+                                <div class="neuron"></div>
+                            </div>
+                            <div class="layer output-layer">
+                                <div class="neuron"></div>
+                                <div class="neuron"></div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="neural-info">
+                        <h3>كيف تعمل الشبكات العصبية؟</h3>
+                        <p>الشبكات العصبية الاصطناعية تحاكي عمل الدماغ البشري من خلال طبقات من الخلايا العصبية المتصلة.</p>
+                        <button class="learn-more-btn">تعرف على المزيد</button>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- AI Report Section -->
+        <section id="ai-report" class="report-section">
+            <div class="container">
+                <h2 class="section-title">التقرير الشامل</h2>
+                <div class="report-grid">
+                    <div class="report-card">
+                        <div class="report-icon">
+                            <i class="fas fa-chart-line"></i>
+                        </div>
+                        <h3>تحليل الأداء</h3>
+                        <p>إحصائيات مفصلة عن أداء النظام</p>
+                    </div>
+                    <div class="report-card">
+                        <div class="report-icon">
+                            <i class="fas fa-lightbulb"></i>
+                        </div>
+                        <h3>الرؤى الذكية</h3>
+                        <p>تحليلات متقدمة للبيانات</p>
+                    </div>
+                    <div class="report-card">
+                        <div class="report-icon">
+                            <i class="fas fa-cogs"></i>
+                        </div>
+                        <h3>إعدادات متقدمة</h3>
+                        <p>تخصيص النظام حسب احتياجاتك</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Footer -->
+        <footer class="footer">
+            <div class="container">
+                <div class="footer-content">
+                    <div class="footer-section">
+                        <h4>تواصل معنا</h4>
+                        <div class="social-links">
+                            <a href="mailto:mcharymop123@gmail.com"><i class="fas fa-envelope"></i></a>
+                        </div>
+                    </div>
+                </div>
+                <div class="footer-bottom">
+                    <p>&copy; 2025 mashAI . جميع الحقوق محفوظة.</p>
+                </div>
+            </div>
+        </footer>
+    </div>
+
+    <script src="groq-api.js"></script>
+    <script src="script.js"></script>
+</body>
+</html>
