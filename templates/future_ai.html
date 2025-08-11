@@ -1,360 +1,0 @@
-<!DOCTYPE html>
-<html lang="ar" dir="rtl">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>مستقبل الذكاء الاصطناعي - رؤية تفاعلية</title>
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-    <style>
-        :root {
-            --primary-color: #00f7ff;
-            --secondary-color: #6c63ff;
-            --dark-bg: #0a0a1a;
-            --text-color: #ffffff;
-            --transition: all 0.3s ease;
-        }
-        
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-        }
-        
-        body {
-            background-color: var(--dark-bg);
-            color: var(--text-color);
-            line-height: 1.6;
-            overflow-x: hidden;
-        }
-        
-        .navbar {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            padding: 1.5rem 10%;
-            background: rgba(10, 10, 26, 0.8);
-            position: fixed;
-            width: 100%;
-            top: 0;
-            z-index: 1000;
-            backdrop-filter: blur(10px);
-            border-bottom: 1px solid rgba(0, 247, 255, 0.1);
-        }
-        
-        .logo {
-            color: var(--primary-color);
-            text-decoration: none;
-            font-size: 1.5rem;
-            font-weight: bold;
-            display: flex;
-            align-items: center;
-            gap: 0.5rem;
-        }
-        
-        .nav-links {
-            display: flex;
-            gap: 2rem;
-        }
-        
-        .nav-link {
-            color: var(--text-color);
-            text-decoration: none;
-            font-size: 1.1rem;
-            transition: var(--transition);
-            position: relative;
-        }
-        
-        .nav-link:hover {
-            color: var(--primary-color);
-        }
-        
-        .nav-link.active {
-            color: var(--primary-color);
-            font-weight: bold;
-        }
-        
-        .container {
-            max-width: 1200px;
-            margin: 7rem auto 0;
-            padding: 0 2rem;
-        }
-        
-        .page-header {
-            text-align: center;
-            margin-bottom: 4rem;
-            padding: 2rem 0;
-            border-bottom: 1px solid rgba(0, 247, 255, 0.2);
-        }
-        
-        .page-header h1 {
-            font-size: 3rem;
-            color: var(--primary-color);
-            margin-bottom: 1rem;
-        }
-        
-        .page-header p {
-            font-size: 1.2rem;
-            opacity: 0.9;
-            max-width: 800px;
-            margin: 0 auto;
-        }
-        
-        .section {
-            margin-bottom: 4rem;
-            background: rgba(255, 255, 255, 0.03);
-            padding: 2.5rem;
-            border-radius: 15px;
-            border: 1px solid rgba(0, 247, 255, 0.1);
-            transition: var(--transition);
-        }
-        
-        .section:hover {
-            transform: translateY(-5px);
-            box-shadow: 0 10px 30px rgba(0, 247, 255, 0.1);
-        }
-        
-        .section h2 {
-            color: var(--primary-color);
-            margin-bottom: 1.5rem;
-            font-size: 2rem;
-            display: flex;
-            align-items: center;
-            gap: 1rem;
-        }
-        
-        .section p {
-            margin-bottom: 1.5rem;
-            line-height: 1.8;
-            opacity: 0.9;
-        }
-        
-        .highlight {
-            color: var(--primary-color);
-            font-weight: bold;
-        }
-        
-        .grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
-            gap: 2rem;
-            margin-top: 2rem;
-        }
-        
-        .card {
-            background: rgba(255, 255, 255, 0.05);
-            padding: 1.5rem;
-            border-radius: 10px;
-            border: 1px solid rgba(0, 247, 255, 0.1);
-            transition: var(--transition);
-        }
-        
-        .card:hover {
-            transform: translateY(-5px);
-            box-shadow: 0 5px 15px rgba(0, 247, 255, 0.1);
-        }
-        
-        .card h3 {
-            color: var(--primary-color);
-            margin-bottom: 1rem;
-            font-size: 1.3rem;
-        }
-        
-        .footer {
-            text-align: center;
-            padding: 2rem;
-            margin-top: 4rem;
-            border-top: 1px solid rgba(0, 247, 255, 0.1);
-        }
-        
-        @media (max-width: 768px) {
-            .container {
-                padding: 0 1.5rem;
-            }
-            
-            .page-header h1 {
-                font-size: 2.2rem;
-            }
-            
-            .section {
-                padding: 1.5rem;
-            }
-            
-            .nav-links {
-                display: none;
-            }
-        }
-    </style>
-</head>
-<body>
-    <nav class="navbar">
-        <a href="/" class="logo">
-            <i class="fas fa-brain"></i>
-            الذكاء المستقبل
-        </a>
-        <div class="nav-links">
-            <a href="/" class="nav-link" data-page="home"><i class="fas fa-home"></i> الرئيسية</a>
-            <a href="/future_ai" class="nav-link active" data-page="future"><i class="fas fa-robot"></i> مستقبل الذكاء</a>
-            <a href="/report" class="nav-link" data-page="report"><i class="fas fa-file-alt"></i> التقرير</a>
-        </div>
-    </nav>
-
-    <div class="container">
-        <header class="page-header">
-            <h1><i class="fas fa-robot"></i> مستقبل الذكاء الاصطناعي</h1>
-            <p>استكشف معنا رحلة تطور الذكاء الاصطناعي وتأثيره على مستقبل البشرية</p>
-        </header>
-
-        <section class="section">
-            <h2><i class="fas fa-crystal-ball"></i> رؤية عامة لمستقبل الذكاء الاصطناعي</h2>
-            <p>يعد الذكاء الاصطناعي من أكثر التقنيات تحولاً في عصرنا الحالي، حيث يشكل ملامح المستقبل على مستويات متعددة: اقتصادية، اجتماعية، علمية، وحتى فلسفية.</p>
-            
-            <div class="grid">
-                <div class="card">
-                    <h3>مساعدات شخصية ذكية</h3>
-                    <p>أنظمة مثل ChatGPT وSiri وGoogle Assistant ستصبح أكثر ذكاءً وتفاعلاً مع المستخدمين.</p>
-                </div>
-                <div class="card">
-                    <h3>أنظمة توصية متطورة</h3>
-                    <p>تخصيص المحتوى على المنصات الرقمية سيكون أكثر دقة وفعالية من أي وقت مضى.</p>
-                </div>
-            </div>
-        </section>
-
-        <section class="section">
-            <h2><i class="fas fa-robot"></i> مجالات التوسع المستقبلة</h2>
-            
-            <div class="grid">
-                <div class="card">
-                    <h3>🏥 الطب والرعاية الصحية</h3>
-                    <p>تشخيص الأمراض بدقة عالية، روبوتات جراحية، وتحليل جيني متقدم للتنبؤ بالأمراض.</p>
-                </div>
-                <div class="card">
-                    <h3>🚗 النقل والمركبات</h3>
-                    <p>انتشار السيارات ذاتية القيادة وتحسين شبكات النقل لتقليل الحوادث والازدحام.</p>
-                </div>
-                <div class="card">
-                    <h3>🏭 الصناعة والروبوتات</h3>
-                    <p>أتمتة كاملة لخطوط الإنتاج وتطوير روبوتات للعمل في البيئات الخطرة.</p>
-                </div>
-                <div class="card">
-                    <h3>🧠 التعليم</h3>
-                    <p>أنظمة تعليمية ذكية قادرة على تخصيص المحتوى التعليمي حسب مستوى كل طالب.</p>
-                </div>
-            </div>
-        </section>
-
-        <section class="section">
-            <h2><i class="fas fa-users"></i> التأثير على المجتمع</h2>
-            
-            <div class="grid">
-                <div class="card">
-                    <h3>🔄 سوق العمل</h3>
-                    <p>ظهور وظائف جديدة في مجال الذكاء الاصطناعي مع اختفاء بعض الوظائف التقليدية.</p>
-                </div>
-                <div class="card">
-                    <h3>⚖️ الجوانب الأخلاقية</h3>
-                    <p>حاجة ماسة لتشريعات تنظم استخدام الذكاء الاصطناعي وحماية الخصوصية.</p>
-                </div>
-            </div>
-        </section>
-
-        <section class="section">
-            <h2><i class="fas fa-lightbulb"></i> اتجاهات مستقبلية</h2>
-            
-            <div class="grid">
-                <div class="card">
-                    <h3>الذكاء العام الاصطناعي (AGI)</h3>
-                    <p>آلات قادرة على التفكير والتعلم كالبشر، متوقعة بين 2040-2060.</p>
-                </div>
-                <div class="card">
-                    <h3>دمج الذكاء الاصطناعي بالجسم البشري</h3>
-                    <p>مشاريع مثل Neuralink لربط الدماغ البشري بالحاسوب.</p>
-                </div>
-                <div class="card">
-                    <h3>الإبداع الاصطناعي</h3>
-                    <p>إنتاج محتوى إبداعي من صور وفيديوهات وموسيقى بجودة عالية.</p>
-                </div>
-            </div>
-        </section>
-
-        <section class="section">
-            <h2><i class="fas fa-exclamation-triangle"></i> التحديات والمخاوف</h2>
-            <ul style="padding-right: 1.5rem; line-height: 2.5;">
-                <li>انحياز الخوارزميات وتعزيزها للتحيزات الموجودة.</li>
-                <li>الاعتماد المفرط على التكنولوجيا وضعف المهارات البشرية.</li>
-                <li>مخاوف أمنية من فقدان السيطرة على أنظمة الذكاء الاصطناعي المتقدمة.</li>
-                <li>تأثير الذكاء الاصطناعي على الخصوصية والأمن السيبراني.</li>
-            </ul>
-        </section>
-    </div>
-
-    <footer class="footer">
-        <p>© 2025 مستقبل الذكاء الاصطناعي. جميع الحقوق محفوظة.</p>
-    </footer>
-
-    <script>
-        // Update active link based on current page
-        document.addEventListener('DOMContentLoaded', function() {
-            const currentPage = 'future';
-            const navLinks = document.querySelectorAll('.nav-link');
-            
-            navLinks.forEach(link => {
-                link.classList.remove('active');
-                if (link.getAttribute('data-page') === currentPage) {
-                    link.classList.add('active');
-                }
-                
-                // Add smooth transition on click
-                link.addEventListener('click', function(e) {
-                    // Only handle internal navigation
-                    if (this.href && this.href.startsWith(window.location.origin)) {
-                        e.preventDefault();
-                        document.body.style.opacity = '0.5';
-                        document.body.style.transition = 'opacity 0.3s ease';
-                        
-                        setTimeout(() => {
-                            window.location.href = this.href;
-                        }, 300);
-                    }
-                });
-            });
-            
-            // Add page load animation
-            document.body.style.opacity = '0';
-            setTimeout(() => {
-                document.body.style.transition = 'opacity 0.5s ease';
-                document.body.style.opacity = '1';
-            }, 100);
-        });
-        
-        // Handle page exit animation
-        window.addEventListener('beforeunload', function() {
-            document.body.style.opacity = '0.5';
-            document.body.style.transition = 'opacity 0.3s ease';
-        });
-
-        // Smooth scrolling for anchor links
-        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
-            anchor.addEventListener('click', function (e) {
-                e.preventDefault();
-                document.querySelector(this.getAttribute('href')).scrollIntoView({
-                    behavior: 'smooth'
-                });
-            });
-        });
-
-        // Navbar scroll effect
-        window.addEventListener('scroll', () => {
-            const navbar = document.querySelector('.navbar');
-            if (window.scrollY > 50) {
-                navbar.style.background = 'rgba(10, 10, 26, 0.95)';
-                navbar.style.boxShadow = '0 5px 20px rgba(0, 0, 0, 0.2)';
-            } else {
-                navbar.style.background = 'rgba(10, 10, 26, 0.8)';
-                navbar.style.boxShadow = 'none';
-            }
-        });
-    </script>
-</body>
-</html>
